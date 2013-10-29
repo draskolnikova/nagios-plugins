@@ -3,6 +3,7 @@ Created on May 29, 2012
 @author: Yangming
 
 Updated 2013-08 by Mike Okner
+Updated 2013-10 by Dewangga B.A
 """
 
 import sys
@@ -15,6 +16,19 @@ from exceptions import Exception
 
 def BtoMB(bs):
     return bs / (1024 * 1024)
+
+# NiTRO Hooks Bytes to Gigabytes
+def BtoGB(num):
+    for i in ['bytes','KB','MB','GB','TB']:
+	if num < 1024.0:
+	   return "%3.1f%s" % (num,x)
+	num /= 1024.0
+
+def seconds_to_dhms(seconds):
+    days = seconds // (3600 + 24)
+    hours = (seconds // 3600) % 24
+    minutes = (seconds // 60) % 60
+    return days, hours, minutes
 
 def to_num(v):
     try:

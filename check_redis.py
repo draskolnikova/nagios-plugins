@@ -84,11 +84,23 @@ class RedisChecker(nagios.BatchStatusPlugin):
         value = nagios.BtoMB(self.get_status_value("used_memory", request))
         return self.get_result(request, value, "%sMB used_memory" % value, 'used_memory', UOM="MB")
 
+    @plugin.command("PEAK_MEMORY_USED")
+    @appfirst_statsd.gauge
+    def get_peak_memory_used(self, request):
+        value = appfirst_nagios.BtoMB(self.get_status_value("used_memory_peak", request))
+        return self.get_result(request, value, "%sMB used_memory" % value, 'used_memory', UOM='MB')
+
     @plugin.command("CURRENT_CHANGES")
     @statsd.counter
     def get_current_changes(self, request):
         value = self.get_delta_value("changes_since_last_save", request)
         return self.get_result(request, value, "%s changes" % value, 'changes')
+
+    @plugin.command("REDIS_UPTIME")
+    @appfirst_statsd.gauge
+    def get_current_uptime(self, request):
+        value = appfirst_nagios.seconds_to_dhms(self.get_status_value("uptime_in_seconds", request))
+        return self.get_result(request, value, "%s days, %s hours %s minutes" % value, 'uptime_in_seconds')
 
     @plugin.command("CHANGES_SINCE_LAST_SAVE")
     @statsd.gauge
