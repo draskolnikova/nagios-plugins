@@ -245,18 +245,13 @@ class BasePlugin(object):
                 NOTE: -oo means nagative infinite, +oo means positive infinite
         '''
         status_code = Status.UNKNOWN
-        if   (warn is not None
-            and (  (not exclusive                          )
-                or (    exclusive and value == warn))
-            and (  (not reverse   and value <  warn)
-                or (    reverse   and value >  warn))):
-            status_code = Status.OK
-        elif (crit is not None
-            and (  (    exclusive                          )
-                or (not exclusive and value == warn))
-            and (  (not reverse   and value >  crit)
-                or (    reverse   and value <  crit))):
-            status_code = Status.CRITICAL
+        if      (crit is not None
+		and value >= crit):
+		status_code = Status.CRITICAL
+        elif    (warn is not None
+		and value < warn):
+		status_code = Status.OK
+
         elif warn is not None:
             status_code = Status.WARNING
         else:
